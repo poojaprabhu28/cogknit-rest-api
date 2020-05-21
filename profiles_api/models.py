@@ -14,13 +14,11 @@ class UserProfileManager(BaseUserManager):
         if not email:
             raise ValueError("Users must have an email address")
 
-        #normalize the email address i.e. make second half case sensitive
         email = self.normalize_email(email)
         user = self.model(email=email, name=name)
-
-        #set password with default function which is encrypted
+        
         user.set_password(password)
-        user.save(using=self._db)               #best way to save in django
+        user.save(using=self._db)
 
         return user
 
@@ -30,6 +28,7 @@ class UserProfileManager(BaseUserManager):
 
         user.is_superuser = True        #is_superuser is automatically created by our class permissions
         user.is_staff = True
+
         user.save(using=self._db)
 
         return user
@@ -46,7 +45,7 @@ class UserProfile (AbstractBaseUser, PermissionsMixin):
 
     #fileds to work with django admin and authertication system
     USERNAME_FIELD = 'email'
-    REQUIRED_FILEDS = ['name']
+    REQUIRED_FIELDS = ['name']
     #user must specify email and name
 
     def get_full_name(self):        #retrieves from Database
